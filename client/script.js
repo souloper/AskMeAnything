@@ -5,7 +5,7 @@ const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
 
 //var text = "Hello welcome to AskMeAnything. I am your personal AI bot!";
-setTimeout(welcomeVoice, 5000); 
+setTimeout(welcomeVoice, 2000); 
 
 // welcomeVoice(text);
 function welcomeVoice() {
