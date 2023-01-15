@@ -1,6 +1,6 @@
 ## Description
 
-This is a web-based chat bot with which any user of this application can initiate a conversation with the AI bot. The bot will provide authentic and valid solutions to any problems or concerns. It can provide answers to coding problems, travel guides, math problems, and any other type of question. The famous chatGPT api from OpenAI is used to get AI-generated answers based on the question.
+This is a web-based chat bot with which any user of this application can initiate a conversation with the AI bot. The bot will provide authentic and valid solutions to any problems or concerns. It can provide answers to coding problems, travel guides, math problems, and any other type of question. Api from OpenAI is used to get AI-generated answers based on the question.
 
 P.S - If you like it give it a star✨
 
