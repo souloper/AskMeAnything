@@ -4,59 +4,57 @@ import user from './assets/user.svg'
 const form = document.querySelector('form')
 const chatContainer = document.querySelector('#chat_container')
 
-//var text = "Hello welcome to AskMeAnything. I am your personal AI bot!";
-setTimeout(welcomeVoice, 2000); 
+// var text = "Hello welcome to AskMeAnything. I am your personal AI bot!";
+setTimeout(welcomeVoice, 2000)
 
 // welcomeVoice(text);
-function welcomeVoice() {
-    var msg = new SpeechSynthesisUtterance(
-      "Hello welcome to AskMeAnything. I am your personal AI bot!"
-    );
-    window.speechSynthesis.speak(msg);
+function welcomeVoice () {
+  const msg = new SpeechSynthesisUtterance(
+    'Hello welcome to AskMeAnything. I am your personal AI bot!'
+  )
+  window.speechSynthesis.speak(msg)
 }
-//welcomeVoice(text);
+// welcomeVoice(text);
 // var msg = new SpeechSynthesisUtterance("Hello welcome to AskMeAnything. I am your personal AI bot!");
 // window.speechSynthesis.speak(msg);
 
 let loadInterval
 
-function loader(element) {
-    element.textContent = ''
+function loader (element) {
+  element.textContent = ''
 
-    loadInterval = setInterval(() => {
-        element.textContent += '.';
+  loadInterval = setInterval(() => {
+    element.textContent += '.'
 
-        if (element.textContent === '....') {
-            element.textContent = '';
-        }
-    }, 300);
+    if (element.textContent === '....') {
+      element.textContent = ''
+    }
+  }, 300)
 }
 
-function typeText(element, text) {
-    let index = 0
+function typeText (element, text) {
+  let index = 0
 
-    let interval = setInterval(() => {
-        if (index < text.length) {
-            element.innerHTML += text.charAt(index)
-            index++
-        } else {
-            clearInterval(interval)
-        }
-    }, 20)
+  const interval = setInterval(() => {
+    if (index < text.length) {
+      element.innerHTML += text.charAt(index)
+      index++
+    } else {
+      clearInterval(interval)
+    }
+  }, 20)
 }
 
+function generateUniqueId () {
+  const timestamp = Date.now()
+  const randomNumber = Math.random()
+  const hexadecimalString = randomNumber.toString(16)
 
-function generateUniqueId() {
-    const timestamp = Date.now();
-    const randomNumber = Math.random();
-    const hexadecimalString = randomNumber.toString(16);
-
-    return `id-${timestamp}-${hexadecimalString}`;
+  return `id-${timestamp}-${hexadecimalString}`
 }
 
-function chatStripe(isAi, value, uniqueId) {
-    return (
-        `
+function chatStripe (isAi, value, uniqueId) {
+  return `
         <div class="wrapper ${isAi && 'ai'}">
             <div class="chat">
                 <div class="profile">
@@ -69,58 +67,57 @@ function chatStripe(isAi, value, uniqueId) {
             </div>
         </div>
     `
-    )
 }
 
 const handleSubmit = async (e) => {
-    e.preventDefault()
+  e.preventDefault()
 
-    const data = new FormData(form)
+  const data = new FormData(form)
 
-    // user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
+  // user's chatstripe
+  chatContainer.innerHTML += chatStripe(false, data.get('prompt'))
 
-    form.reset()
+  form.reset()
 
-    // bot's chatstripe
-    const uniqueId = generateUniqueId()
-    chatContainer.innerHTML += chatStripe(true, " ", uniqueId)
+  // bot's chatstripe
+  const uniqueId = generateUniqueId()
+  chatContainer.innerHTML += chatStripe(true, ' ', uniqueId)
 
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+  chatContainer.scrollTop = chatContainer.scrollHeight
 
-    const messageDiv = document.getElementById(uniqueId)
+  const messageDiv = document.getElementById(uniqueId)
 
-    loader(messageDiv)
+  loader(messageDiv)
 
-    const response = await fetch("https://askmeanything.onrender.com", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt: data.get("prompt"),
-      }),
-    });
+  const response = await fetch('https://askmeanything.onrender.com', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      prompt: data.get('prompt')
+    })
+  })
 
-    clearInterval(loadInterval)
-    messageDiv.innerHTML = " "
+  clearInterval(loadInterval)
+  messageDiv.innerHTML = ' '
 
-    if (response.ok) {
-        const data = await response.json();
-        const parsedData = data.bot.trim() 
+  if (response.ok) {
+    const data = await response.json()
+    const parsedData = data.bot.trim()
 
-        typeText(messageDiv, parsedData)
-    } else {
-        const err = await response.text()
+    typeText(messageDiv, parsedData)
+  } else {
+    const err = await response.text()
 
-        messageDiv.innerHTML = "Something went wrong"
-        alert(err)
-    }
+    messageDiv.innerHTML = 'Something went wrong'
+    alert(err)
+  }
 }
 
 form.addEventListener('submit', handleSubmit)
 form.addEventListener('keyup', (e) => {
-    if (e.keyCode === 13) {
-        handleSubmit(e)
-    }
+  if (e.keyCode === 13) {
+    handleSubmit(e)
+  }
 })
